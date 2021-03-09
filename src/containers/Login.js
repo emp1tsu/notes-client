@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { Auth } from "aws-amplify";
 import { useAppContext } from "../libs/contextLib";
+import { useFormFields } from "../libs/hooksLib";
 import "./Login.css";
+import { useHistory } from "react-router";
+import LoaderButton from "../components/LoaderButton";
+import { onError } from "../libs/errorLib";
 
 export default function Login() {
+  const history = useHistory();
   const { userHasAuthenticated } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fields, handleFieldChange] = useFormFields({
+    email: "",
+    password: "",
+  });
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -17,11 +26,15 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    setIsLoading(true);
+
     try {
       await Auth.signIn(email, password);
       userHasAuthenticated(true);
+      history.push("/");
     } catch (e) {
-      window.alert(e.message);
+      onError(e);
+      setIsLoading(false);
     }
   }
 
@@ -33,21 +46,27 @@ export default function Login() {
           <Form.Control
             autoFocus
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={fields.email}
+            onChange={handleFieldChange}
           />
         </Form.Group>
         <Form.Group size="lg" controlId="password">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={fields.password}
+            onChange={handleFieldChange}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <LoaderButton
+          block
+          size="lg"
+          type="submit"
+          isLoading={isLoading}
+          disabled={!validateForm()}
+        >
           Login
-        </Button>
+        </LoaderButton>
       </Form>
     </div>
   );
