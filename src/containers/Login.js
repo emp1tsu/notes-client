@@ -12,15 +12,13 @@ export default function Login() {
   const history = useHistory();
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: "",
   });
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return fields.email.length > 0 && fields.password.length > 0;
   }
 
   async function handleSubmit(event) {
@@ -29,7 +27,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await Auth.signIn(email, password);
+      await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
       history.push("/");
     } catch (e) {
