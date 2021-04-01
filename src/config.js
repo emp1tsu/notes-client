@@ -1,4 +1,5 @@
 const config = {
+  MAX_ATTACHMENT_SIZE: 5000000,
   s3: {
     REGION: "ap-northeast-1",
     BUCKET: "notes-api-prod-serverlessdeploymentbucket-10662xn0w8d20",
