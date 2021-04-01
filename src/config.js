@@ -14,6 +14,8 @@ const config = {
     APP_CLIENT_ID: "225a7q3thlq9ie959n8emef0tm",
     IDENTITY_POOL_ID: "ap-northeast-1:ed9ea4be-491d-4999-90d8-624847beec48",
   },
+  STRIPE_KEY:
+    "pk_test_51ILjqDIQEXciHgpZdyyifRWu99zBDBzvAyz8Q4h1NkaqRZOIXOeRoUJyTxx2rqYAj3VjxlfnaWYUmrTJRVE2qElQ009rorwVCP",
 };
 
 export default config;
